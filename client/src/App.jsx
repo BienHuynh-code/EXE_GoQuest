@@ -8,6 +8,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import StaffDashboard from './pages/StaffDashboard'
 import LandingPage from './pages/LandingPage'
 import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentCancel from './pages/PaymentCancel'
 import { Toaster } from 'react-hot-toast'
 
 
@@ -29,6 +30,10 @@ function ProtectedRoute({ children }) {
 
     if (user.role === 'admin') {
         return <Navigate to="/admin" replace />
+    }
+
+    if (user.role === 'staff') {
+        return <Navigate to="/staff" replace />
     }
 
     return children
@@ -154,6 +159,14 @@ function AppContent() {
                     element={
                         <ProtectedRoute>
                             <PaymentSuccess />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/payment-cancel"
+                    element={
+                        <ProtectedRoute>
+                            <PaymentCancel />
                         </ProtectedRoute>
                     }
                 />

@@ -482,32 +482,34 @@ export default function Dashboard() {
                                                         <h3 className="dsh-task-name">{tData.title}</h3>
                                                         <p className="dsh-task-desc">{tData.description}</p>
                                                         
-                                                        {done ? (
-                                                            <button className="dsh-task-btn dsh-task-btn--done" disabled>
-                                                                {t('dashboard.journey_tasks.reward_btn')}
-                                                            </button>
-                                                        ) : isStarted && !isExpired ? (
-                                                            <div style={{ marginTop: 'auto' }}>
-                                                                <input 
-                                                                    type="text" 
-                                                                    placeholder="Nhập mã xác nhận" 
-                                                                    value={verifyCodes[tData._id] || ''}
-                                                                    onChange={(e) => setVerifyCodes(prev => ({ ...prev, [tData._id]: e.target.value }))}
-                                                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '8px', fontSize: '14px' }}
-                                                                />
-                                                                <button className="dsh-task-btn" onClick={() => handleComplete(tData._id, verifyCodes[tData._id])}>
-                                                                    Xác nhận hoàn thành
+                                                        <div style={{ marginTop: 'auto' }}>
+                                                            {done ? (
+                                                                <button className="dsh-task-btn dsh-task-btn--done" disabled>
+                                                                    {t('dashboard.journey_tasks.reward_btn')}
                                                                 </button>
-                                                            </div>
-                                                        ) : isExpired ? (
-                                                            <button className="dsh-task-btn" style={{ background: '#ef4444' }} onClick={() => handlePayment(tData._id)}>
-                                                                Hết hạn - Làm lại (5.000đ)
-                                                            </button>
-                                                        ) : (
-                                                            <button className="dsh-task-btn" onClick={() => handleStartMission(tData._id)}>
-                                                                {t('dashboard.journey_tasks.start_btn')}
-                                                            </button>
-                                                        )}
+                                                            ) : isStarted && !isExpired ? (
+                                                                <>
+                                                                    <input 
+                                                                        type="text" 
+                                                                        placeholder="Nhập mã xác nhận" 
+                                                                        value={verifyCodes[tData._id] || ''}
+                                                                        onChange={(e) => setVerifyCodes(prev => ({ ...prev, [tData._id]: e.target.value }))}
+                                                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '8px', fontSize: '14px' }}
+                                                                    />
+                                                                    <button className="dsh-task-btn" onClick={() => handleComplete(tData._id, verifyCodes[tData._id])}>
+                                                                        Xác nhận hoàn thành
+                                                                    </button>
+                                                                </>
+                                                            ) : isExpired ? (
+                                                                <button className="dsh-task-btn" style={{ background: '#ef4444' }} onClick={() => handlePayment(tData._id)}>
+                                                                    Hết hạn - Làm lại (5.000đ)
+                                                                </button>
+                                                            ) : (
+                                                                <button className="dsh-task-btn" onClick={() => handleStartMission(tData._id)}>
+                                                                    {t('dashboard.journey_tasks.start_btn')}
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </article>
                                             )
@@ -556,32 +558,34 @@ export default function Dashboard() {
                                                 <h3 className="dsh-task-name">{task.title}</h3>
                                                 <p className="dsh-task-desc">{task.description}</p>
                                                 
-                                                {done ? (
-                                                    <button className="dsh-task-btn dsh-task-btn--done" disabled>
-                                                        {t('dashboard.journey_tasks.reward_btn')}
-                                                    </button>
-                                                ) : isStarted && !isExpired ? (
                                                     <div style={{ marginTop: 'auto' }}>
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder="Nhập mã xác nhận" 
-                                                            value={verifyCodes[task._id] || ''}
-                                                            onChange={(e) => setVerifyCodes(prev => ({ ...prev, [task._id]: e.target.value }))}
-                                                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '8px', fontSize: '14px' }}
-                                                        />
-                                                        <button className="dsh-task-btn" onClick={() => handleComplete(task._id, verifyCodes[task._id])}>
-                                                            Xác nhận hoàn thành
-                                                        </button>
+                                                        {done ? (
+                                                            <button className="dsh-task-btn dsh-task-btn--done" disabled>
+                                                                {t('dashboard.journey_tasks.reward_btn')}
+                                                            </button>
+                                                        ) : isStarted && !isExpired ? (
+                                                            <>
+                                                                <input 
+                                                                    type="text" 
+                                                                    placeholder="Nhập mã xác nhận" 
+                                                                    value={verifyCodes[task._id] || ''}
+                                                                    onChange={(e) => setVerifyCodes(prev => ({ ...prev, [task._id]: e.target.value }))}
+                                                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '8px', fontSize: '14px' }}
+                                                                />
+                                                                <button className="dsh-task-btn" onClick={() => handleComplete(task._id, verifyCodes[task._id])}>
+                                                                    Xác nhận hoàn thành
+                                                                </button>
+                                                            </>
+                                                        ) : isExpired ? (
+                                                            <button className="dsh-task-btn" style={{ background: '#ef4444' }} onClick={() => handlePayment(task._id)}>
+                                                                Hết hạn - Làm lại (5.000đ)
+                                                            </button>
+                                                        ) : (
+                                                            <button className="dsh-task-btn" onClick={() => handleStartMission(task._id)}>
+                                                                {t('dashboard.journey_tasks.start_btn')}
+                                                            </button>
+                                                        )}
                                                     </div>
-                                                ) : isExpired ? (
-                                                    <button className="dsh-task-btn" style={{ background: '#ef4444' }} onClick={() => handlePayment(task._id)}>
-                                                        Hết hạn - Làm lại (5.000đ)
-                                                    </button>
-                                                ) : (
-                                                    <button className="dsh-task-btn" onClick={() => handleStartMission(task._id)}>
-                                                        {t('dashboard.journey_tasks.start_btn')}
-                                                    </button>
-                                                )}
                                             </div>
                                         </article>
                                     )

@@ -23,10 +23,10 @@ exports.getProgress = async (req, res) => {
         }
 
         const tasks = await Task.find({ isActive: true }).sort({ order: 1 });
-        const completedTaskIds = user.completedTasks.map(t => t.taskId.toString());
+        const completedTaskIds = (user.completedTasks || []).map(t => t.taskId ? t.taskId.toString() : null).filter(Boolean);
 
         const tasksWithProgress = tasks.map(task => {
-            const mission = user.activeMissions.find(m => m.taskId.toString() === task._id.toString());
+            const mission = (user.activeMissions || []).find(m => m.taskId && m.taskId.toString() === task._id.toString());
             return {
                 ...task._doc,
                 isCompleted: completedTaskIds.includes(task._id.toString()),
@@ -38,7 +38,7 @@ exports.getProgress = async (req, res) => {
         res.json({
             tasks: tasksWithProgress,
             longTermProgress: user.longTermProgress,
-            totalCompleted: user.completedTasks.length
+            totalCompleted: (user.completedTasks || []).length
         });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi lấy tiến độ nhiệm vụ' });
@@ -52,24 +52,37 @@ exports.getProgress = async (req, res) => {
 exports.startMission = async (req, res) => {
     try {
         const { taskId } = req.params;
+        const mongoose = require('mongoose');
+
+        if (!mongoose.Types.ObjectId.isValid(taskId)) {
+            return res.status(400).json({ message: 'ID nhiệm vụ không hợp lệ' });
+        }
+
         const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+        }
         
         if (!user.activeMissions) {
             user.activeMissions = [];
         }
 
-        const missionIndex = user.activeMissions.findIndex(m => m.taskId.toString() === taskId);
-        
+        const missionIndex = user.activeMissions.findIndex(m => m.taskId && m.taskId.toString() === taskId);
         const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 
         if (missionIndex > -1) {
-            // If already started and not expired, return error or current timer
-            if (user.activeMissions[missionIndex].status === 'started' && user.activeMissions[missionIndex].expiresAt > new Date()) {
-                return res.status(400).json({ message: 'Nhiệm vụ này đang được thực hiện!', expiresAt: user.activeMissions[missionIndex].expiresAt });
+            const mission = user.activeMissions[missionIndex];
+            // If already started and not expired
+            if (mission.status === 'started' && mission.expiresAt > new Date()) {
+                return res.status(400).json({ message: 'Nhiệm vụ này đang được thực hiện!', expiresAt: mission.expiresAt });
             }
-            // If expired, they need to pay (implementation later)
-            if (user.activeMissions[missionIndex].status === 'expired' || user.activeMissions[missionIndex].expiresAt <= new Date()) {
+            // If expired
+            if (mission.status === 'expired' || (mission.expiresAt && mission.expiresAt <= new Date())) {
                 return res.status(400).json({ message: 'Nhiệm vụ đã hết hạn. Vui lòng thanh toán để thực hiện lại.' });
+            }
+            // If completed
+            if (mission.status === 'completed') {
+                return res.status(400).json({ message: 'Bạn đã hoàn thành nhiệm vụ này rồi!' });
             }
         } else {
             user.activeMissions.push({
@@ -83,7 +96,8 @@ exports.startMission = async (req, res) => {
         await user.save();
         res.json({ message: 'Nhiệm vụ đã bắt đầu! Bạn có 30 phút để hoàn thành.', expiresAt });
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi bắt đầu nhiệm vụ' });
+        console.error('startMission error:', error);
+        res.status(500).json({ message: 'Lỗi hệ thống khi bắt đầu nhiệm vụ', details: error.message });
     }
 };
 
@@ -99,7 +113,7 @@ exports.completeTask = async (req, res) => {
         }
 
         // 1. Check if mission exists and is not expired
-        const mission = user.activeMissions.find(m => m.taskId.toString() === taskId);
+        const mission = user.activeMissions.find(m => m.taskId && m.taskId.toString() === taskId);
         if (!mission) {
             return res.status(400).json({ message: 'Vui lòng bắt đầu nhiệm vụ trước!' });
         }
@@ -126,6 +140,9 @@ exports.completeTask = async (req, res) => {
 
         // 3. Mark as completed
         mission.status = 'completed';
+        if (!user.completedTasks) {
+            user.completedTasks = [];
+        }
         user.completedTasks.push({ taskId, completedAt: new Date() });
         await user.save();
 
