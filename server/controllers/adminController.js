@@ -5,16 +5,11 @@ const Task = require('../models/Task');
 // @route   GET /api/admin/users
 exports.getUsersReport = async (req, res) => {
     try {
-        const tasks = await Task.find({ isActive: true });
-        const totalTasksAvailable = tasks.length;
         const users = await User.find({});
 
-        const allUsers = users.map(u => {
+        const allUsers = await Promise.all(users.map(async (u) => {
             const REQUIRED_TASKS = 5;
-            // Calculate total points
-            const userPoints = tasks
-                .filter(t => u.completedTasks.some(ct => ct.taskId.toString() === t._id.toString()))
-                .reduce((sum, t) => sum + t.points, 0);
+            const userPoints = await u.calculatePoints();
 
             // Get last completion time
             const lastCompletedAt = u.completedTasks.length > 0
@@ -42,7 +37,7 @@ exports.getUsersReport = async (req, res) => {
                 status,
                 longTermProgress: u.longTermProgress
             };
-        });
+        }));
 
         // Sort: Role Admin always on top, then by points (desc)
         const sortedUsers = allUsers.sort((a, b) => {
@@ -54,7 +49,7 @@ exports.getUsersReport = async (req, res) => {
             }
 
             if (a.lastCompletedAt && b.lastCompletedAt) {
-                return new Date(a.lastCompletedAt) - new Date(b.lastCompletedAt);
+                return new Date(b.lastCompletedAt) - new Date(a.lastCompletedAt);
             }
 
             return 0;
@@ -62,6 +57,7 @@ exports.getUsersReport = async (req, res) => {
 
         res.json(sortedUsers);
     } catch (error) {
+        console.error('getUsersReport error:', error);
         res.status(500).json({ message: 'Lỗi lấy danh sách người dùng' });
     }
 };
@@ -132,7 +128,7 @@ exports.updateTask = async (req, res) => {
     }
 };
 
-// @desc    Delete a task (Soft delete by setting isActive to false)
+// @desc    Delete a task (Soft delete)
 // @route   DELETE /api/admin/tasks/:id
 exports.deleteTask = async (req, res) => {
     try {
@@ -148,6 +144,7 @@ exports.deleteTask = async (req, res) => {
         res.status(500).json({ message: 'Lỗi xóa nhiệm vụ' });
     }
 };
+
 // @desc    Create a new staff account
 // @route   POST /api/admin/staff
 exports.createStaff = async (req, res) => {

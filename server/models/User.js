@@ -107,4 +107,25 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
+// Calculate current points
+userSchema.methods.calculatePoints = async function () {
+    const Task = mongoose.model('Task');
+    const tasks = await Task.find({ isActive: true });
+    
+    const completedTaskIds = (this.completedTasks || []).map(t => t.taskId?.toString());
+    const basePts = tasks
+        .filter(t => completedTaskIds.includes(t._id.toString()))
+        .reduce((sum, t) => sum + (t.points || 0), 0);
+        
+    const plasticPts = this.longTermProgress?.usingPersonalBottle ? 50 : 0;
+    const distancePts = (this.longTermProgress?.distance || 0) >= 2000 ? 100 : 0;
+    
+    // Total steps logic could also go here
+    const stepsPts = Math.floor((this.longTermProgress?.steps || 0) / 1000) * 10;
+    
+    const spentPts = (this.redeemedGifts || []).reduce((sum, g) => sum + (g.pointsSpent || 0), 0);
+    
+    return basePts + plasticPts + distancePts + stepsPts - spentPts;
+};
+
 module.exports = mongoose.model('User', userSchema);
