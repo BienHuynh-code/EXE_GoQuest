@@ -9,10 +9,6 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password, displayName } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin' });
-        }
-
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
             return res.status(400).json({ message: 'Email hoặc tên đăng nhập đã được sử dụng' });
@@ -51,10 +47,6 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { identifier, password } = req.body;
-
-        if (!identifier || !password) {
-            return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin' });
-        }
 
         const user = await User.findOne({ $or: [{ email: identifier }, { username: identifier }] });
         if (!user) {

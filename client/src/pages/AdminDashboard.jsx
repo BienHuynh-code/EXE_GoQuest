@@ -339,26 +339,13 @@ function AdminDashboard() {
                                 <img src="https://res.cloudinary.com/dnnz4ze3b/image/upload/v1773476778/Asset_3_on57x4.png" alt="Go Quest Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
                                 <span style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--color-text-primary)' }}>Go Quest</span>
                             </Link>
-                            <div style={{ 
-                                display: 'inline-flex', 
-                                alignItems: 'center', 
-                                gap: 'var(--space-xs)',
-                                background: 'rgba(45, 122, 58, 0.1)',
-                                color: 'var(--color-accent-primary)',
-                                padding: '4px 12px',
-                                borderRadius: '20px',
-                                fontSize: '0.75rem',
-                                fontWeight: 700
-                            }}>
-                                🛡️ HỆ THỐNG QUẢN TRỊ
-                            </div>
                         </div>
                         <h1 className="page-title" style={{ margin: 0 }}>{t('admin.title')}</h1>
                         <p className="page-subtitle" style={{ marginTop: '4px' }}>{t('admin.subtitle')}</p>
                     </div>
                     <div style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'center' }}>
                         <Link to="/staff" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', height: '100%' }}>
-                            <span>📋</span> Giao diện Nhân viên
+                            Giao diện Nhân viên
                         </Link>
                         <button 
                             className="btn btn-secondary" 
@@ -372,7 +359,7 @@ function AdminDashboard() {
                                 height: '100%'
                             }}
                         >
-                            <span>🚪</span> {t('navbar.logout')}
+                            {t('navbar.logout')}
                         </button>
                     </div>
                 </div>
@@ -388,10 +375,10 @@ function AdminDashboard() {
                     width: 'fit-content'
                 }}>
                     {[
-                        { key: 'leaderboard', label: t('admin.tabs.leaderboard'), icon: '📊' },
-                        { key: 'tasks', label: t('admin.tabs.tasks'), icon: '🎯' },
-                        { key: 'staff', label: 'Quản lý nhân viên', icon: '👤' },
-                        { key: 'gifts', label: 'Quản lý quà tặng', icon: '🎁' }
+                        { key: 'leaderboard', label: t('admin.tabs.leaderboard') },
+                        { key: 'tasks', label: t('admin.tabs.tasks') },
+                        { key: 'staff', label: 'Quản lý nhân viên' },
+                        { key: 'gifts', label: 'Quản lý quà tặng' }
                     ].map(tab => (
                         <button
                             key={tab.key}
@@ -412,7 +399,7 @@ function AdminDashboard() {
                                 boxShadow: activeTab === tab.key ? '0 4px 12px rgba(45, 122, 58, 0.1)' : 'none'
                             }}
                         >
-                            <span>{tab.icon}</span> {tab.label}
+                            {tab.label}
                         </button>
                     ))}
                 </div>
@@ -427,26 +414,25 @@ function AdminDashboard() {
                         }}>
                             <div className="card stat-card" style={{ borderBottom: '4px solid var(--color-accent-primary)' }}>
                                 <div className="stat-value">{totalPlayers}</div>
-                                <div className="stat-label">👥 {t('admin.stats.total_players')}</div>
+                                <div className="stat-label">{t('admin.stats.total_players')}</div>
                             </div>
                             <div className="card stat-card" style={{ borderBottom: '4px solid var(--color-success)' }}>
                                 <div className="stat-value">{completedPlayers}</div>
-                                <div className="stat-label">🏁 {t('admin.stats.completed')}</div>
+                                <div className="stat-label">{t('admin.stats.completed')}</div>
                             </div>
                             <div className="card stat-card" style={{ borderBottom: '4px solid var(--color-warning)' }}>
                                 <div className="stat-value">{avgPoints}</div>
-                                <div className="stat-label">⭐️ {t('admin.stats.avg_points')}</div>
+                                <div className="stat-label">{t('admin.stats.avg_points')}</div>
                             </div>
                         </div>
 
                         <div className="section-header" style={{ flexWrap: 'wrap', gap: '10px' }}>
                             <h2 className="section-title">
-                                <span style={{ background: 'var(--color-accent-primary)', color: '#fff', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>🏆</span>
                                 {t('admin.leaderboard.title')}
                             </h2>
                             <div style={{ display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', background: 'var(--color-bg-secondary)', borderRadius: '10px', padding: '0 10px', border: '1px solid rgba(44, 89, 38, 0.1)' }}>
-                                    <span>🔍</span>
+
                                     <input 
                                         type="text" 
                                         placeholder="Tìm tên, username..." 
@@ -580,7 +566,6 @@ function AdminDashboard() {
                     <div className="animate-fade-in">
                         <div className="section-header">
                             <h2 className="section-title">
-                                <span style={{ background: 'var(--color-accent-primary)', color: '#fff', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>👥</span>
                                 Danh sách nhân viên
                             </h2>
                             <button className="btn btn-primary" onClick={() => setShowStaffModal(true)}>+ Thêm nhân viên</button>
@@ -625,7 +610,6 @@ function AdminDashboard() {
                     <div className="animate-fade-in">
                         <div className="section-header">
                             <h2 className="section-title">
-                                <span style={{ background: 'var(--color-accent-primary)', color: '#fff', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>🎯</span>
                                 {t('admin.tasks.title')}
                             </h2>
                             <button className="btn btn-primary" onClick={openAddModal}>{t('admin.tasks.add_btn')}</button>
@@ -701,7 +685,6 @@ function AdminDashboard() {
                     <div className="animate-fade-in">
                         <div className="section-header">
                             <h2 className="section-title">
-                                <span style={{ background: 'var(--color-accent-primary)', color: '#fff', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>🎁</span>
                                 Quản lý quà tặng
                             </h2>
                             <button className="btn btn-primary" onClick={openAddGiftModal}>+ Thêm quà tặng</button>

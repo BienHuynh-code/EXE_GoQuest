@@ -86,7 +86,7 @@ export default function StaffDashboard() {
                                     fontSize: 'var(--font-size-sm)',
                                 }}
                             >
-                                ⚙️ Về Admin
+                                Về Admin
                             </Link>
                         )}
                         <button
@@ -99,7 +99,7 @@ export default function StaffDashboard() {
                                 fontSize: 'var(--font-size-sm)',
                             }}
                         >
-                            🚪 Đăng xuất
+                            Đăng xuất
                         </button>
                     </div>
                 </div>
@@ -169,7 +169,7 @@ export default function StaffDashboard() {
                     <div className="card animate-fade-in" style={{ animationDelay: '0.1s' }}>
                         <div className="section-header" style={{ marginBottom: '16px' }}>
                             <h2 className="section-title">
-                                👥 Khách đang làm nhiệm vụ
+                            Khách đang làm nhiệm vụ
                             </h2>
                             <div className="stat-value" style={{ fontSize: 'var(--font-size-xl)' }}>
                                 {stats?.totalPlayers}
@@ -177,7 +177,7 @@ export default function StaffDashboard() {
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', background: 'var(--color-bg-secondary)', borderRadius: '10px', padding: '0 10px', border: '1px solid rgba(44, 89, 38, 0.1)', marginBottom: '16px' }}>
-                            <span>🔍</span>
+
                             <input
                                 type="text"
                                 placeholder="Tìm kiếm tên, username..."
@@ -191,8 +191,7 @@ export default function StaffDashboard() {
                             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                 <thead>
                                     <tr style={{ borderBottom: '2px solid rgba(45, 122, 58, 0.1)' }}>
-                                        <th style={{ padding: 'var(--space-md) 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>KHÁCH HÀNG</th>
-                                        <th style={{ padding: 'var(--space-md) 0', color: 'var(--color-text-muted)', fontSize: '0.85rem', textAlign: 'right' }}>NHIỆM VỤ ĐANG LÀM</th>
+                                        <th style={{ padding: 'var(--space-md) 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>DANH SÁCH DU KHÁCH</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -206,18 +205,6 @@ export default function StaffDashboard() {
                                                 <div style={{ fontWeight: 600 }}>{player.displayName || 'Khách'}</div>
                                                 <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>@{player.username}</div>
                                             </td>
-                                            <td style={{ padding: 'var(--space-md) 0', textAlign: 'right' }}>
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-end' }}>
-                                                    {player.activeMissions?.map((m, idx) => (
-                                                        <span key={idx} className="task-badge community" style={{ fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                                                            {m.title}
-                                                        </span>
-                                                    ))}
-                                                    {(!player.activeMissions || player.activeMissions.length === 0) && (
-                                                        <span className="task-badge" style={{ opacity: 0.5 }}>{player.activeMissionsCount} nhiệm vụ</span>
-                                                    )}
-                                                </div>
-                                            </td>
                                         </tr>
                                     ))}
                                     {stats?.activePlayers?.filter(p => {
@@ -226,8 +213,8 @@ export default function StaffDashboard() {
                                         return (p.displayName || '').toLowerCase().includes(query) || (p.username || '').toLowerCase().includes(query);
                                     }).length === 0 && (
                                             <tr>
-                                                <td colSpan="2" style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--color-text-muted)' }}>
-                                                    🏖️ Hiện không có khách nào đang làm nhiệm vụ hoặc phù hợp với tìm kiếm
+                                                <td style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--color-text-muted)' }}>
+                                                    🏖️ Hiện không có khách nào đang chơi hoặc phù hợp với tìm kiếm
                                                 </td>
                                             </tr>
                                         )}
