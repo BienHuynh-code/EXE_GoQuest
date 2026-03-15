@@ -13,6 +13,8 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
@@ -27,13 +29,17 @@ app.get('/api/health', async (req, res) => {
     const userCount = await User.countDocuments();
     res.json({
       status: 'ok',
-      message: 'Cồn Sơn Tourism API is running with MongoDB!',
+      message: 'Cồn Sơn Tourism API is running!',
       users: userCount
     });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
+
+// Error Middleware
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
